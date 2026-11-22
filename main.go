@@ -12,14 +12,14 @@ type post struct {
 	ID        uuid.UUID `json:"id"`
 	Title     string `json:"title"`
 	Author    string `json:"author"`
-	CreatedAt time.Time `time_format:"2006-01-02" time:"created_at"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 // posts slice to seed blog post data.
 var posts = []post{
 	{ID: uuid.New(), Title: "First Post", Author: "Author One", CreatedAt: time.Date(2024, 6, 1, 0, 0, 0, 0, time.UTC)},
-	{ID: uuid.New(), Title: "Second Post", Author: "Author Two", CreatedAt: time.Date(2024, 6, 2, 0, 0, 0, 0, time.UTC)},
-	{ID: uuid.New(), Title: "Third Post", Author: "Author Three", CreatedAt: time.Time{}}, 
+	{ID: uuid.New(), Title: "Second Post", Author: "Author Two", CreatedAt:  time.Now()},
+	{ID: uuid.New(), Title: "Third Post", Author: "Author Three", CreatedAt: time.Now()}, 
 }
 
 // getPosts responds with the list of all posts as JSON.
