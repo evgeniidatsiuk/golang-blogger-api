@@ -36,10 +36,24 @@ func addPost(c *gin.Context) {
     c.IndentedJSON(http.StatusCreated, newPost)
 }
 
+func getPostByID(c *gin.Context) {
+    id := c.Param("id")
+
+    for _, p := range posts {
+        if p.ID == id {
+            c.IndentedJSON(http.StatusOK, p)
+            return
+        }
+    }
+
+    c.IndentedJSON(http.StatusNotFound, gin.H{"message": "post not found"})
+}
+
 // main function to set up the router and routes.
 func main() {
     router := gin.Default()
     router.GET("/posts", getPosts)
+    router.GET("/posts/:id", getPostByID)
     router.POST("/posts", addPost)
 
     router.Run("localhost:8080")
