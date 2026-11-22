@@ -47,10 +47,14 @@ func addPost(c *gin.Context) {
 }
 
 func getPostByID(c *gin.Context) {
-	id := c.Param("id")
+	id, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": "invalid UUID"})
+		return
+	}
 
 	for _, p := range posts {
-		if p.ID.String() == id {
+		if p.ID == id {
 			c.IndentedJSON(http.StatusOK, p)
 			return
 		}
