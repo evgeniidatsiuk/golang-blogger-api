@@ -3,21 +3,23 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
+	"github.com/google/uuid"
 )
 
 // post represents data about a blog post.
 type post struct {
-	ID        string `json:"id"`
+	ID        uuid.UUID `json:"id"`
 	Title     string `json:"title"`
 	Author    string `json:"author"`
-	CreatedAt string `json:"created_at"`
+	CreatedAt time.Time `time_format:"2006-01-02" time:"created_at"`
 }
 
 // posts slice to seed blog post data.
 var posts = []post{
-	{ID: "1", Title: "First Post", Author: "Author One", CreatedAt: "2024-06-01"},
-	{ID: "2", Title: "Second Post", Author: "Author Two", CreatedAt: "2024-06-02"},
-	{ID: "3", Title: "Third Post", Author: "Author Three", CreatedAt: ""},
+	{ID: uuid.New(), Title: "First Post", Author: "Author One", CreatedAt: time.Date(2024, 6, 1, 0, 0, 0, 0, time.UTC)},
+	{ID: uuid.New(), Title: "Second Post", Author: "Author Two", CreatedAt: time.Date(2024, 6, 2, 0, 0, 0, 0, time.UTC)},
+	{ID: uuid.New(), Title: "Third Post", Author: "Author Three", CreatedAt: time.Time{}}, 
 }
 
 // getPosts responds with the list of all posts as JSON.
@@ -37,6 +39,9 @@ func addPost(c *gin.Context) {
 		return
 	}
 
+	newPost.ID = uuid.New()
+	newPost.CreatedAt = time.Now()
+
 	posts = append(posts, newPost)
 	c.IndentedJSON(http.StatusCreated, newPost)
 }
@@ -45,7 +50,7 @@ func getPostByID(c *gin.Context) {
 	id := c.Param("id")
 
 	for _, p := range posts {
-		if p.ID == id {
+		if p.ID.String() == id {
 			c.IndentedJSON(http.StatusOK, p)
 			return
 		}
