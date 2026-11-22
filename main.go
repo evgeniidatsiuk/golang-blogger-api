@@ -29,6 +29,11 @@ func addPost(c *gin.Context) {
 	var newPost post
 
 	if err := c.BindJSON(&newPost); err != nil {
+		message := "invalid request"
+		if err != nil {
+			message = err.Error()
+		}
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"message": message})
 		return
 	}
 
